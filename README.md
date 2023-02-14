@@ -7,7 +7,7 @@ Plugin de braquage d'atm sur le jeu Nova-Life : Amboise
 
 
 ## Installation
-1. Télecharger le plugin : 
+1. Télecharger le plugin : https://github.com/loicsmith/ATM-HACK/releases/tag/ATM-HACK
 2. Placer le dans votre dossier plugins de votre serveur
 3. Démarrer votre serveur
 

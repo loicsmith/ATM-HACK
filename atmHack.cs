@@ -98,7 +98,7 @@ namespace atmHack
 
         private void InitDirectory()
         {
-            atmHack._dirPath = this.pluginsPath + "/RPPlus";
+            atmHack._dirPath = this.pluginsPath + "/atmHack";
             atmHack.ConfPath = atmHack._dirPath + "/config.json";
             if (!Directory.Exists(atmHack._dirPath))
                 Directory.CreateDirectory(atmHack._dirPath);

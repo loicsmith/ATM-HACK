@@ -7,8 +7,8 @@
     <ProjectGuid>{E68813F5-0951-4F5B-A5D4-CC56147B0B24}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RPPlusedit</RootNamespace>
-    <AssemblyName>RPPlusedit</AssemblyName>
+    <RootNamespace>atmHack</RootNamespace>
+    <AssemblyName>atmHack</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -59,8 +59,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RPPlusConfig.cs" />
-    <Compile Include="RoleplayPlus.cs" />
+    <Compile Include="atmhackConfig.cs" />
+    <Compile Include="atmHack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,10 +2,10 @@
 using System;
 using System.IO;
 
-namespace RPPlus
+namespace atmHack
 {
     [Serializable]
-    public class RPPlusConfig
+    public class atmhackConfig
     {
         public long hackCooldown;
         public int minMoney;
@@ -15,7 +15,7 @@ namespace RPPlus
         public void Save()
         {
             string contents = JsonConvert.SerializeObject((object)this);
-            File.WriteAllText(RoleplayPlus.ConfPath, contents);
+            File.WriteAllText(atmHack.ConfPath, contents);
         }
     }
 }

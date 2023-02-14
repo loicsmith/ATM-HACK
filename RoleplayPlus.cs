@@ -35,7 +35,7 @@ namespace RPPlus
             this.InitDirectory();
             this._server = Nova.server;
             this._server.OnPlayerTryToHackATM += new Action<Player>(this.TryHack);
-            SChatCommand schatCommand1 = new SChatCommand("/reloadrpplus", "Permet de recharger le plugin", "/reloadatm", (Action<Player, string[]>)((player, arg) =>
+            SChatCommand schatCommand1 = new SChatCommand("/reloadatm", "Permet de recharger le plugin", "/reloadatm", (Action<Player, string[]>)((player, arg) =>
    {
             if (player.IsAdmin)
                 {
@@ -45,7 +45,7 @@ namespace RPPlus
                 else
                     player.SendText("<color=red>Vous n'êtes pas administrateur !</color>");
             }));
-            SChatCommand schatCommand2 = new SChatCommand("/resetcooldown", "Permet de rénitaliser le cooldown pour braquer l'atm", "/resetcooldownatm", (Action<Player, string[]>)((player, arg) =>
+            SChatCommand schatCommand2 = new SChatCommand("/resetcooldownatm", "Permet de rénitaliser le cooldown pour braquer l'atm", "/resetcooldownatm", (Action<Player, string[]>)((player, arg) =>
             {
                 if (player.IsAdmin)
                 {

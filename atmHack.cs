@@ -1,4 +1,4 @@
-﻿using Life;
+using Life;
 using Life.BizSystem;
 using Life.DB;
 using Life.Network;
@@ -35,28 +35,7 @@ namespace atmHack
             this.InitDirectory();
             this._server = Nova.server;
             this._server.OnPlayerTryToHackATM += new Action<Player>(this.TryHack);
-            SChatCommand schatCommand1 = new SChatCommand("/reloadatm", "Permet de recharger le plugin", "/reloadatm", (Action<Player, string[]>)((player, arg) =>
-   {
-            if (player.IsAdmin)
-                {
-                    this._config = JsonConvert.DeserializeObject<atmhackConfig>(File.ReadAllText(atmHack.ConfPath));
-                    player.SendText("<color=green>Rechargement OK</color>");
-                }
-                else
-                    player.SendText("<color=red>Vous n'êtes pas administrateur !</color>");
-            }));
-            SChatCommand schatCommand2 = new SChatCommand("/resetcooldownatm", "Permet de rénitaliser le cooldown pour braquer l'atm", "/resetcooldownatm", (Action<Player, string[]>)((player, arg) =>
-            {
-                if (player.IsAdmin)
-                {
-                    this._lastRob = 0L;
-                    player.SendText("<color=green>Le cooldown vient d'être rénitialiser</color>");
-                }
-                else
-                    player.SendText("<color=red>Vous n'êtes pas administrateur !</color>");
-            }));
-
-            SChatCommand schatCommand3 = new SChatCommand("/atm", "Permet d'afficher les commandes d'atm", "/atm", (Action<Player, string[]>)((player, arg) =>
+            SChatCommand schatCommand1 = new SChatCommand("/atm", "Permet d'afficher les commandes d'atm", "/atm", (Action<Player, string[]>)((player, arg) =>
             {
                 if (player.IsAdmin)
                 {
@@ -64,6 +43,7 @@ namespace atmHack
                     UIPanel atmmenu = new UIPanel("Hack Tool menu", UIPanel.PanelType.Tab);
                     atmmenu.AddTabLine("Recharger le fichier de configuration", (ui) => { this._config = JsonConvert.DeserializeObject<atmhackConfig>(File.ReadAllText(atmHack.ConfPath)); player.SendText("<color=green>Rechargement OK</color>"); });
                     atmmenu.AddTabLine("Rénitialiser le cooldown", (ui) => { this._lastRob = 0L; player.SendText("<color=green>Le cooldown vient d'être rénitialiser</color>"); });
+                    atmmenu.AddTabLine("Donner un ATM (posable)", (ui) => { Nova.character.CmdGiveItem(player.character.Id, 58, 1); player.SendText("<color=green>Vous avez reçu 1x ATM</color>"); });
                     atmmenu.AddButton("Fermer", (ui) => { player.ClosePanel(ui); });
                     atmmenu.AddButton("Sélectionner", (Action<UIPanel>)(ui1 => ui1.SelectTab()));
                     player.ShowPanelUI(atmmenu);
@@ -74,8 +54,6 @@ namespace atmHack
                     player.SendText("<color=red>Vous n'êtes pas administrateur !</color>");
             }));
             schatCommand1.Register();
-            schatCommand2.Register();
-            schatCommand3.Register();
         }
 
         public void TryHack(Player player)

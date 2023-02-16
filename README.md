@@ -23,7 +23,4 @@ Plugin de braquage d'atm sur le jeu Nova-Life : Amboise
 
 ## Commandes
 
-/atm : permet d'afficher le menu (contient les deux commandes ci dessous)  
-/resetcooldownatm : permet de rénitialiser le temps avant chaque braquage  
-/reloadatm : permet de recharger le fichier de configuration du plugin
-
+/atm : permet d'afficher le menu permettant de rénitialiser le cooldown après braquage, de recharger le fichier de configuration (si modification de celui, pas besoin de redémarrer le serveur) et de se donner 1x ATM (posable)  

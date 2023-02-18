@@ -18,4 +18,15 @@ namespace atmHack
             File.WriteAllText(atmHack.ConfPath, contents);
         }
     }
+    public class logsLSPLUGIN
+    {
+ 
+        public string ATMWebhookURL;
+
+        public void Save()
+        {
+            string contents = JsonConvert.SerializeObject((object)this);
+            File.WriteAllText(atmHack.ConfPath, contents);
+        }
+    }
 }

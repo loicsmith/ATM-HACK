@@ -1,4 +1,4 @@
-﻿using Life;
+using Life;
 using Life.BizSystem;
 using Life.DB;
 using Life.Network;
@@ -9,9 +9,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using UnityEngine;
+using BestHTTP;
 using Random = UnityEngine.Random;
 
 namespace atmHack
@@ -23,6 +26,9 @@ namespace atmHack
         private static string _dirPath;
         public static string ConfPath;
         private atmhackConfig _config;
+
+        private logsLSPLUGIN _logs;
+
 
         public atmHack(IGameAPI api)
           : base(api)
@@ -43,7 +49,7 @@ namespace atmHack
                     UIPanel atmmenu = new UIPanel("Hack Tool menu", UIPanel.PanelType.Tab);
                     atmmenu.AddTabLine("Recharger le fichier de configuration", (ui) => { this._config = JsonConvert.DeserializeObject<atmhackConfig>(File.ReadAllText(atmHack.ConfPath)); player.SendText("<color=green>Rechargement OK</color>"); });
                     atmmenu.AddTabLine("Rénitialiser le cooldown", (ui) => { this._lastRob = 0L; player.SendText("<color=green>Le cooldown vient d'être rénitialiser</color>"); });
-                    atmmenu.AddTabLine("Donner un ATM (posable)", (ui) => { Nova.character.CmdGiveItem(player.character.Id, 58, 1); player.SendText("<color=green>Vous avez reçu 1x ATM</color>"); });
+                    atmmenu.AddTabLine("Donner un ATM (posable)", (ui) => { player.setup.inventory.AddItem(58, 1, ""); player.SendText("<color=green>Vous avez reçu 1x ATM</color>"); });
                     atmmenu.AddButton("Fermer", (ui) => { player.ClosePanel(ui); });
                     atmmenu.AddButton("Sélectionner", (Action<UIPanel>)(ui1 => ui1.SelectTab()));
                     player.ShowPanelUI(atmmenu);
@@ -69,6 +75,29 @@ namespace atmHack
                     ((MonoBehaviour)this._server.lifeManager).StartCoroutine(this.GetMoney(player, ((UnityEngine.Component)player.setup).transform.position));
                     player.SendText("<color=red>HackTool.exe est en cours de lancement</color > ");
                     player.ClosePanel(ui);
+
+                    if (this._logs.ATMWebhookURL != "")
+                    {
+                        string message = $"{player.steamId} - {player.GetFullName()} est entrain de braquer l'ATM";
+                        //this.server.SendMessageToAll(message);
+                        string payload = $"{{\"content\":\"{message}\"}}";
+                        HTTPRequest request = new HTTPRequest(new Uri(this._logs.ATMWebhookURL), HTTPMethods.Post, (req, res) =>
+                        {
+                            if (res.IsSuccess)
+                            {
+                                UnityEngine.Debug.Log("Webhook envoyé ");
+                            }
+                            else
+                            {
+                                UnityEngine.Debug.LogError($"Erreur de l'envoi du webhook: {res.Message}");
+                            }
+                        });
+                        request.AddHeader("Content-Type", "application/json");
+                        request.RawData = System.Text.Encoding.UTF8.GetBytes(payload);
+                        request.Send();
+
+                        //Debug.LogError(message);
+                    }
                 }
             })).AddButton("Close", new Action<UIPanel>(player.ClosePanel)).SetText("Voulez vous lancer HackTool.exe ?");
             player.ShowPanelUI(uiPanel);
@@ -100,6 +129,38 @@ namespace atmHack
                     this._config = new atmhackConfig();
                     this._config = JsonConvert.DeserializeObject<atmhackConfig>(str);
                     string contents = JsonConvert.SerializeObject((object)this._config);
+                    File.WriteAllText(atmHack.ConfPath, contents);
+                }
+                catch (Exception ex)
+                {
+                    UnityEngine.Debug.Log((object)ex.Message);
+                    UnityEngine.Debug.LogException(ex);
+                }
+            }
+
+
+            atmHack._dirPath = this.pluginsPath + "/LOGS";
+            atmHack.ConfPath = atmHack._dirPath + "/ATMlogs.json";
+            if (!Directory.Exists(atmHack._dirPath))
+                Directory.CreateDirectory(atmHack._dirPath);
+            if (!File.Exists(atmHack.ConfPath))
+            {
+                this._logs = new logsLSPLUGIN()
+                {
+                    ATMWebhookURL = "",
+                };
+
+                string contents = JsonConvert.SerializeObject((object)this._logs);
+                File.WriteAllText(atmHack.ConfPath, contents);
+            }
+            else
+            {
+                string str = File.ReadAllText(atmHack.ConfPath);
+                try
+                {
+                    this._logs = new logsLSPLUGIN();
+                    this._logs = JsonConvert.DeserializeObject<logsLSPLUGIN>(str);
+                    string contents = JsonConvert.SerializeObject((object)this._logs);
                     File.WriteAllText(atmHack.ConfPath, contents);
                 }
                 catch (Exception ex)

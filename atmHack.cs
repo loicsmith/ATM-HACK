@@ -1,4 +1,4 @@
-﻿using Life;
+using Life;
 using Life.BizSystem;
 using Life.DB;
 using Life.Network;

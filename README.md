@@ -19,6 +19,7 @@ Plugin de braquage d'atm sur le jeu Nova-Life : Amboise
 - Braquage d'atm
 - Configurable (argent, temps avant chaque braquage, durée du braquage)
 - Menu pour rénitialiser le temps avant chaque braquage, et pour recharger le fichier de configuration sans redémarré le serveur !
+- Système de logs par webhook discord ! (Pour l'installation, un fichier json apparaitra directement dans le dossier plugins > logs)
 
 ## Notes
 

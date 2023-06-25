@@ -3,7 +3,7 @@
 
 Plugin de braquage d'atm sur le jeu Nova-Life : Amboise
 
-# CONTACT
+# Contact
 
 En cas de problème/questions, vous pouvez me contactez sur discord : loicsmith (ou Loicsmith#0275)
 

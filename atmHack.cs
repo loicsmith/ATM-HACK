@@ -28,7 +28,7 @@ namespace atmHack
         private atmhackConfig _config;
 
         private logsLSPLUGIN _logs;
-
+        private int policeCount;
 
         public atmHack(IGameAPI api)
           : base(api)
@@ -62,10 +62,55 @@ namespace atmHack
             schatCommand1.Register();
         }
 
+        private bool isActivity(Player player, Activity.Type type)
+        {
+            if (!player.HasBiz()) return false;
+
+            foreach (Activity.Type activity in Nova.biz.GetBizActivities(player.biz.Id))
+            {
+                if (activity == type)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void TryHack(Player player)
         {
             UIPanel uiPanel = new UIPanel("Hack Tool V0.4", (UIPanel.PanelType)0).AddButton("Commencer le Hack", (Action<UIPanel>)(ui =>
             {
+
+
+                foreach (Player player2 in this._server.Players)
+                {
+                    if (player2.character != null)
+                    {
+                        if (player2.isInGame)
+                        {
+                            if (player2.HasBiz() == true)
+                            {
+
+                                if (isActivity(player2, Activity.Type.LawEnforcement))
+                                {
+
+
+                                    this.policeCount += 1;
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+                if (this.policeCount < this._config.police)
+                {
+                    player.SendText("<color=#e8472a>Il n'y a pas assez de policiers pour braquer." + "" + "</color>");
+                    policeCount = 0;
+                    return;
+                }
+
                 if (this._lastRob > Nova.UnixTimeNow())
                 {
                     player.SendText("<color=red>Veuillez attendre quelques heures avant de braquer ce DAB.</color > ");
@@ -116,7 +161,8 @@ namespace atmHack
                     hackCooldown = 21600L,
                     minMoney = 1500,
                     maxMoney = 3000,
-                    hackDuration = 20
+                    hackDuration = 20,
+                    police = 2
                 };
                 string contents = JsonConvert.SerializeObject((object)this._config);
                 File.WriteAllText(atmHack.ConfPath, contents);
@@ -172,31 +218,53 @@ namespace atmHack
         }
         private IEnumerator GetMoney(Player player, Vector3 position)
         {
-            foreach (Player player1 in ((IEnumerable<Player>)this._server.Players).Where<Player>((Func<Player, bool>)(p =>
+            //  foreach (Player playerpolice in ((IEnumerable<Player>)this._server.Players).Where<Player>((Func<Player, bool>)(p =>
+            // {
+            //    if (p.isInGame)
+            // {
+            // Characters character = p.character;
+            //   Bizs bizs;
+            //   try
+            //   {
+            //       bizs = ((IEnumerable<Bizs>)Nova.biz.bizs).First<Bizs>((Func<Bizs, bool>)(u => u.Id == character.BizId));
+            //   }
+            //    catch
+            //   {
+            //      return false;
+            //   }
+            //   if (bizs != null && character != null && bizs.IsActivity((Activity.Type.LawEnforcement)))
+            //       return p.serviceMetier;
+            // }
+            //return false;
+            //   })))
+
+            foreach (Player player2 in this._server.Players)
             {
-                if (p.isInGame)
+                if (player2.character != null)
                 {
-                    Characters character = p.character;
-                    Bizs bizs;
-                    try
+                    if (player2.isInGame)
                     {
-                        bizs = ((IEnumerable<Bizs>)Nova.biz.bizs).First<Bizs>((Func<Bizs, bool>)(u => u.Id == character.BizId));
+                        if (player2.HasBiz() == true)
+                        {
+
+                            if (isActivity(player2, Activity.Type.LawEnforcement))
+                            {
+
+
+                                player2.setup.TargetPlayClairon(0.5f);
+                                player2.SendText("<color=#e8472a>Un braquage de DAB est en cours, un point a été placé sur votre carte.</color>");
+                                player2.setup.TargetSetGPSTarget(position);
+                                player2.SendText("<color=#e8472a>La caméra a identifié un individu, les résultats peuvent être inexacts :" + player.GetFullName().Replace("A", "$").Replace("E", "%").Replace("I", "^") + " </color> ");
+
+
+                            }
+
+                        }
                     }
-                    catch
-                    {
-                        return false;
-                    }
-                    if (bizs != null && character != null && bizs.IsActivity((Activity.Type)1))
-                        return p.serviceMetier;
                 }
-                return false;
-            })))
-            {
-                player1.setup.TargetPlayClairon(0.5f);
-                player1.SendText("<color=#e8472a>Un braquage de DAB est en cours, un point a été placé sur votre carte.</color>");
-                player1.setup.TargetSetGPSTarget(position);
-                player1.SendText("<color=#e8472a>La caméra a identifié un individu, les résultats peuvent être inexacts :" + player.GetFullName().Replace("A", "$").Replace("E", "%").Replace("I", "^") + " </color> ");
             }
+
+
             this._lastRob = Nova.UnixTimeNow() + this._config.hackCooldown;
             int number = 0;
             int i;
@@ -216,7 +284,7 @@ namespace atmHack
                 }
             }
             int num = Random.Range(this._config.minMoney, this._config.maxMoney) * number;
-            player.AddMoney(num, "ATM ROB");
+            player.AddMoney((double)+num, "ATM ROB");
             if (i == 60)
                 player.SendText("Braquage terminé");
             player.SendText(string.Format("<color=#e8472a>Vous avez volé {0}€</color>", (object)num));

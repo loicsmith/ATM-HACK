@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -11,6 +11,7 @@ namespace atmHack
         public int minMoney;
         public int maxMoney;
         public int hackDuration;
+        public int police;
 
         public void Save()
         {

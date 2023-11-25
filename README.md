@@ -20,7 +20,7 @@ En cas de problème/questions, vous pouvez me contactez sur discord : loicsmith 
 
 - Braquage d'atm
 - Configurable (argent, temps avant chaque braquage, durée du braquage, nombre de policier requis)
-- Menu pour rénitialiser le temps avant chaque braquage, et pour recharger le fichier de configuration sans redémarré le serveur !
+- Menu pour rénitialiser le temps avant chaque braquage sans redémarré le serveur !
 - Système de logs par webhook discord ! (Pour l'installation, un fichier json apparaitra directement dans le dossier plugins > logs)
 
 ## Notes

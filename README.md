@@ -29,4 +29,4 @@ En cas de problème/questions, vous pouvez me contactez sur discord : loicsmith 
   
 ## Commandes
 
-/atm : permet d'afficher le menu permettant de rénitialiser le cooldown après braquage, de recharger le fichier de configuration (si modification de celui, pas besoin de redémarrer le serveur) et de se donner 1x ATM (posable)  
+/atm : permet d'afficher le menu permettant de rénitialiser le cooldown après braquage et de se donner 1x ATM (posable)  

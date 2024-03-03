@@ -1,4 +1,4 @@
-<img src="https://media.discordapp.net/attachments/1174014039333031936/1186032577107218513/AtmHack.jpg" width="300"/>
+<img src="https://i.imgur.com/7H7D3Ga.jpeg" width="300"/>
 
 # PLUGIN ATM-HACK
 
